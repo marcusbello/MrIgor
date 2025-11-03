@@ -1,0 +1,31 @@
+﻿@{
+    Layout = null;
+    var title = ViewBag.Title ?? "Dashboard";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@title - MrIgor Dashboard</title>
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <div class="dashboard-container d-flex">
+        <aside class="sidebar bg-dark text-white p-3" style="width: 250px;">
+            <h3>My Dashboard</h3>
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item"><a class="nav-link text-white" href="/Dashboard">Overview</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="/Dashboard/Reports">Reports</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="/Dashboard/Settings">Settings</a></li>
+            </ul>
+        </aside>
+
+        <main class="flex-grow-1 p-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
