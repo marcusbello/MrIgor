@@ -1,0 +1,83 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Super Admin Dashboard";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4">Super Admin Dashboard</h2>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Total Schools</h5>
+                <h3 class="text-primary">128</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Active Subscriptions</h5>
+                <h3 class="text-success">84</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Monthly Revenue</h5>
+                <h3 class="text-info">$12,400</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Active Users</h5>
+                <h3 class="text-warning">2,431</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-8">
+            <div class="card p-4 shadow-sm border-0">
+                <h5>Revenue Growth</h5>
+                <canvas id="superAdminRevenueChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 shadow-sm border-0">
+                <h5>Plan Distribution</h5>
+                <canvas id="superAdminPlansChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctxRev = document.getElementById('superAdminRevenueChart');
+new Chart(ctxRev, {
+    type: 'line',
+    data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+            label: 'Revenue ($)',
+            data: [2000,3000,5000,4000,7000,8000],
+            borderColor: '#007bff',
+            fill: true,
+            tension: 0.3
+        }]
+    }
+});
+
+const ctxPlan = document.getElementById('superAdminPlansChart');
+new Chart(ctxPlan, {
+    type: 'doughnut',
+    data: {
+        labels: ['Free', 'Premium'],
+        datasets: [{
+            data: [44, 84],
+            backgroundColor: ['#ffc107', '#28a745']
+        }]
+    }
+});
+</script>
+}

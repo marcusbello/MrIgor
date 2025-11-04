@@ -1,0 +1,79 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "School Admin Dashboard";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4">Admin Dashboard</h2>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Students</h5>
+                <h3 class="text-primary">540</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Teachers</h5>
+                <h3 class="text-success">34</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Subjects</h5>
+                <h3 class="text-info">18</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card shadow-sm border-0 text-center p-3">
+                <h5>Attendance Rate</h5>
+                <h3 class="text-warning">92%</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-8">
+            <div class="card p-4 shadow-sm border-0">
+                <h5>Student Enrollment Trend</h5>
+                <canvas id="adminEnrollmentChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-4 shadow-sm border-0">
+                <h5>Teacher to Student Ratio</h5>
+                <canvas id="adminRatioChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('adminEnrollmentChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+            label: 'New Students',
+            data: [20,40,60,45,70,90],
+            backgroundColor: '#007bff'
+        }]
+    }
+});
+
+new Chart(document.getElementById('adminRatioChart'), {
+    type: 'pie',
+    data: {
+        labels: ['Teachers', 'Students'],
+        datasets: [{
+            data: [34,540],
+            backgroundColor: ['#28a745','#17a2b8']
+        }]
+    }
+});
+</script>
+}

@@ -1,0 +1,82 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+    ViewBag.Title = "Student Dashboard";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold mb-4">Student Dashboard</h2>
+
+    <div class="row g-3">
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0 p-3">
+                <h5>Subjects</h5>
+                <h3 class="text-primary">8</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0 p-3">
+                <h5>Attendance</h5>
+                <h3 class="text-success">94%</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0 p-3">
+                <h5>Average Grade</h5>
+                <h3 class="text-info">B+</h3>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm border-0 p-3">
+                <h5>Pending Assignments</h5>
+                <h3 class="text-danger">3</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm border-0">
+                <h5>Grades Overview</h5>
+                <canvas id="studentGradesChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm border-0">
+                <h5>Attendance Trend</h5>
+                <canvas id="studentAttendanceChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('studentGradesChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Math','Eng','Phy','Bio','Chem','Hist','Geo','Comp'],
+        datasets: [{
+            label: 'Score (%)',
+            data: [78,85,69,92,88,81,74,95],
+            backgroundColor: '#17a2b8'
+        }]
+    }
+});
+
+new Chart(document.getElementById('studentAttendanceChart'), {
+    type: 'line',
+    data: {
+        labels: ['Mon','Tue','Wed','Thu','Fri'],
+        datasets: [{
+            label: 'Attendance (%)',
+            data: [100,95,90,100,85],
+            borderColor: '#28a745',
+            fill: true,
+            tension: 0.3
+        }]
+    }
+});
+</script>
+}
