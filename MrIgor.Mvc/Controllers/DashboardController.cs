@@ -9,7 +9,24 @@ namespace MrIgor.Mvc.Controllers
         [Authorize(Roles = "SuperAdmin, Admin, Teacher, Student")]
         public ActionResult Index()
         {
-            return View();
+            if (User.IsInRole("SuperAdmin"))
+            {
+                return RedirectToAction("SuperAdmin");
+            }
+            else if (User.IsInRole("Admin"))
+            {
+                return RedirectToAction("Admin");
+            }
+            else if (User.IsInRole("Teacher"))
+            {
+                return RedirectToAction("Teacher");
+            }
+            else if (User.IsInRole("Student"))
+            {
+                return RedirectToAction("Student");
+            }
+            // Redirect to login page by default
+            return RedirectToAction("Login", "Account");
         }
 
         // GET: DashboardController/SuperAdmin
