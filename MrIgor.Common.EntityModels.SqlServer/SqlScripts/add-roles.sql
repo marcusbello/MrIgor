@@ -3,6 +3,10 @@
 --------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM dbo.AspNetRoles WHERE Name = 'Admin')
     INSERT INTO dbo.AspNetRoles (Id, [Name], [NormalizedName], [ConcurrencyStamp])
+    VALUES (NEWID(), 'SuperAdmin', 'SUPERADMIN', NEWID());
+
+IF NOT EXISTS (SELECT 1 FROM dbo.AspNetRoles WHERE Name = 'Admin')
+    INSERT INTO dbo.AspNetRoles (Id, [Name], [NormalizedName], [ConcurrencyStamp])
     VALUES (NEWID(), 'Admin', 'ADMIN', NEWID());
 
 IF NOT EXISTS (SELECT 1 FROM dbo.AspNetRoles WHERE Name = 'Teacher')

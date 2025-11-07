@@ -2,7 +2,7 @@ using System.Composition;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MrIgor.Mvc.Data;
-using Shared.MrIgor;
+using MrIgor.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
