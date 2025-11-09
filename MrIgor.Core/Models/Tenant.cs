@@ -22,6 +22,10 @@ public partial class Tenant
 
     public bool IsActive { get; set; }
 
+    public bool IsPaid { get; set; }
+
+    public string? SubcriptionPlan { get; set; }
+
     [InverseProperty("Tenant")]
     public virtual ICollection<AspNetRole> AspNetRoles { get; set; } = new List<AspNetRole>();
 
