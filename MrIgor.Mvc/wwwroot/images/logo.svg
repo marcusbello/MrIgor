@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 80" width="220" height="80" role="img" aria-labelledby="title desc">
+  <title id="title">EduArea logo</title>
+  <desc id="desc">A small schoolhouse icon beside the word EduArea.</desc>
+
+  <!-- Background optional (comment out if you want transparency) -->
+  <!-- <rect width="100%" height="100%" fill="#ffffff"/> -->
+
+  <!-- Schoolhouse base -->
+  <g transform="translate(10,8)">
+    <!-- Roof -->
+    <polygon points="26,0 0,18 52,18" fill="#2563EB"/>
+    <!-- Building body -->
+    <rect x="6" y="18" width="40" height="34" rx="3" fill="#3B82F6"/>
+    <!-- Door -->
+    <rect x="22" y="32" width="8" height="20" rx="2" fill="#1E3A8A"/>
+    <!-- Window left -->
+    <rect x="10" y="24" width="8" height="8" rx="1" fill="#BFDBFE"/>
+    <!-- Window right -->
+    <rect x="34" y="24" width="8" height="8" rx="1" fill="#BFDBFE"/>
+    <!-- Flag / mortarboard accent -->
+    <g transform="translate(36,-6) rotate(-20)">
+      <rect x="0" y="0" width="18" height="2" rx="1" fill="#F59E0B"/>
+      <polygon points="5,2 14,2 9.5,7" fill="#F59E0B"/>
+    </g>
+    <!-- Path underline (book hint) -->
+    <path d="M2 54 C 18 46, 34 46, 50 54" fill="none" stroke="#1E40AF" stroke-width="2" stroke-linecap="round"/>
+  </g>
+
+  <!-- Text: EduArea -->
+  <text x="82" y="50" font-family="Manrope, Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        font-size="30" font-weight="700" fill="#0F172A" letter-spacing="-0.5">
+    Edu
+    <tspan fill="#2563EB">Area</tspan>
+  </text>
+</svg>

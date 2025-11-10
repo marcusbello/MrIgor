@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+@* <h1>@ViewData["Title"]</h1>
 
 <div class="row">
     <div class="col-md-4">
@@ -60,7 +60,216 @@
             }
         </section>
     </div>
+</div> *@
+
+<style>
+    body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #f8f9fb;
+        color: #1a1a1a;
+    }
+
+    .register-wrapper {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .left-section {
+        background-color: #f1f3f9;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4rem;
+    }
+
+    .left-section h1 {
+        font-weight: 700;
+        font-size: 2.5rem;
+        line-height: 1.2;
+    }
+
+    .left-section p {
+        color: #6b7280;
+        margin-top: 1rem;
+        font-size: 1rem;
+    }
+
+    .testimonial {
+        background: #fff;
+        border-radius: 1rem;
+        padding: 1.25rem;
+        margin-top: 2rem;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .testimonial small {
+        color: #6b7280;
+    }
+
+    .right-section {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #fff;
+        padding: 3rem 2rem;
+    }
+
+    .form-container {
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .form-control {
+        border-radius: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .btn-primary {
+        background-color: #2563eb;
+        border: none;
+        border-radius: 0.75rem;
+        padding: 0.75rem;
+        font-weight: 600;
+    }
+
+    .btn-primary:hover {
+        background-color: #1e40af;
+    }
+
+    .social-btn {
+        border-radius: 0.75rem;
+        padding: 0.75rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        background: #fff;
+        border: 1px solid #d1d5db;
+    }
+
+    .social-btn img {
+        width: 20px;
+        height: 20px;
+    }
+
+    @@media (max-width: 992px) {
+        .register-wrapper {
+            flex-direction: column;
+        }
+        .left-section {
+            padding: 2rem;
+            text-align: center;
+        }
+        .right-section {
+            padding: 2rem;
+        }
+    }
+</style>
+
+<div class="register-wrapper">
+    <!-- Left Section -->
+    <div class="left-section">
+        <div class="mb-4">
+            <img src="~/images/logo.svg" alt="EduArea Logo" class="img-fluid" style="max-height:80px;">
+        </div>
+        <h1>Simplify Your School's Administration</h1>
+        <p>Join hundreds of schools streamlining their daily operations, from admissions to analytics.</p>
+
+        <div class="testimonial">
+            <p class="fst-italic mb-1">
+                “EduArea has transformed how we manage our school. It's intuitive, powerful, and has saved us countless hours of administrative work. Our staff and parents love it!”
+            </p>
+            <strong>Dr. Aliyah Khan</strong><br>
+            <small>Principal, Northwood Academy</small>
+        </div>
+    </div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+        <div class="form-container">
+            <h3 class="fw-bold mb-1">Create your account</h3>
+            <p class="text-muted mb-4">Get started with simplifying your school’s administration.</p>
+
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Full Name</label>
+                    <input asp-for="Input.FullName" class="form-control" placeholder="Enter your full name" />
+                    <span asp-validation-for="Input.FullName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Work Email</label>
+                    <input asp-for="Input.Email" class="form-control" placeholder="name@school.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                        <input asp-for="Input.Password" class="form-control" placeholder="Enter a strong password" type="password" />
+                        <button type="button" class="btn btn-outline-secondary" id="togglePassword"><i class="bi bi-eye"></i></button>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="input-group">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Re-enter your password" type="password" />
+                        <button type="button" class="btn btn-outline-secondary" id="toggleConfirm"><i class="bi bi-eye-slash"></i></button>
+                    </div>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="termsCheck">
+                    <label class="form-check-label" for="termsCheck">
+                        I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">Create Account</button>
+
+                <div class="text-center mb-3 text-muted">Or continue with</div>
+
+                <div class="d-flex gap-2">
+                    <button type="button" class="social-btn"><img src="~/images/google-icon.png" alt="Google">Google</button>
+                    <button type="button" class="social-btn"><img src="~/images/microsoft-icon.png" alt="Microsoft">Microsoft</button>
+                </div>
+
+                <p class="text-center mt-4 mb-0 text-muted">
+                    Already have an account? <a asp-page="./Login">Log in</a>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
+
+
+<script>
+    // Toggle password visibility
+    document.getElementById('togglePassword').addEventListener('click', function() {
+        const input = document.querySelector('[name="Input.Password"]');
+        input.type = input.type === 'password' ? 'text' : 'password';
+        this.querySelector('i').classList.toggle('bi-eye-slash');
+    });
+
+    document.getElementById('toggleConfirm').addEventListener('click', function() {
+        const input = document.querySelector('[name="Input.ConfirmPassword"]');
+        input.type = input.type === 'password' ? 'text' : 'password';
+        this.querySelector('i').classList.toggle('bi-eye');
+    });
+
+    // Save form data to localStorage (for onboarding flow)
+    document.getElementById('registerForm').addEventListener('submit', function() {
+        const name = document.querySelector('[name="Input.FullName"]').value;
+        const email = document.querySelector('[name="Input.Email"]').value;
+        localStorage.setItem('eduadmin_user', JSON.stringify({ name, email }));
+    });
+</script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
