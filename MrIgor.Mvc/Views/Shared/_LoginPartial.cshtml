@@ -3,25 +3,38 @@
 @inject SignInManager<AspNetUser> SignInManager
 @inject UserManager<AspNetUser> UserManager
 
-<ul class="navbar-nav">
+<div class="d-flex flex-column flex-lg-row w-100 align-items-md-center align-items-right justify-content-between">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
+    <ul class="navbar-nav ms-auto ps-lg-5 ps-0">
+        <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+    </ul>
+    <div class="d-flex flex-column flex-lg-row gap-2 align-items-center ms-lg-auto mt-3 mt-lg-0">
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="nav-link btn btn-outline-secondary">Hello, @User.Identity?.Name!</a>
         <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            <button  type="submit" class="btn btn-primary btn">Logout</button>
         </form>
-    </li>
+    </div>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+    <ul class="navbar-nav ms-auto ps-lg-5 ps-0">
+        <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+        <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+    </ul>
+
+    <div class="d-flex flex-column flex-lg-row gap-2 align-items-center ms-lg-auto mt-3 mt-lg-0">
+        <a class="btn btn-outline-secondary btn" asp-area="Identity" asp-page="/Account/Login">Client Portal</a>
+        <a class="btn btn-primary btn" asp-area="Identity" asp-page="/Account/Register">Sign Up Free</a>
+    </div>
 }
-</ul>
+</div>
