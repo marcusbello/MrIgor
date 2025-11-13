@@ -1,6 +1,200 @@
 @{
     ViewData["Title"] = "Join Us";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your onboarding.</p>
+
+<style>
+    body {
+        color: #212529;
+    }
+    .onboard-container {
+        max-width: 600px;
+        margin: 3rem auto;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 2rem 2.5rem;
+    }
+    .progress {
+        height: 6px;
+        border-radius: 4px;
+    }
+    .step-title {
+        font-weight: 700;
+        font-size: 1.4rem;
+    }
+    .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        font-weight: 600;
+    }
+    .plan-box {
+        border: 2px solid #dee2e6;
+        border-radius: 12px;
+        padding: 1rem;
+        cursor: pointer;
+        transition: border-color 0.2s ease;
+    }
+    .plan-box.active {
+        border-color: #0d6efd;
+        background-color: #f8f9ff;
+    }
+    .step {
+        display: none;
+    }
+    .step.active {
+        display: block;
+    }
+</style>
+
+<div class="onboard-container">
+    <div class="mb-4">
+        <div class="progress">
+            <div id="progressBar" class="progress-bar bg-primary" style="width: 33%;"></div>
+        </div>
+        <p class="text-center text-muted mt-2" id="stepIndicator">Step 1 of 3</p>
+    </div>
+
+    <!-- Step 1 -->
+    <div id="step1" class="step active">
+        <h4 class="step-title mb-3 text-center">Welcome! Let's set up your first school.</h4>
+        <p class="text-center text-muted mb-4">Tell us a bit about your school to get started.</p>
+
+        <form id="formStep1">
+            <div class="mb-3">
+                <label class="form-label">School Name</label>
+                <input type="text" id="schoolName" class="form-control" placeholder="e.g. Northwood High" required>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">School Type</label>
+                    <input type="text" id="schoolType" class="form-control" placeholder="e.g. High School" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Country / City</label>
+                    <input type="text" id="schoolCity" class="form-control" placeholder="e.g. London, UK" required>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary w-100">Create School & Continue →</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2" class="step">
+        <h4 class="step-title mb-3 text-center">Your School is Ready!</h4>
+        <p class="text-center text-muted mb-4">Choose a plan that fits your needs. You can always upgrade later.</p>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <div class="plan-box active" id="freePlan">
+                    <h5 class="fw-bold">Free Plan</h5>
+                    <p class="mb-1">$0 / month</p>
+                    <ul class="mb-0 small">
+                        <li>Manage 1 school</li>
+                        <li>Up to 50 students</li>
+                        <li>Basic reporting</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="plan-box" id="premiumPlan">
+                    <h5 class="fw-bold d-flex justify-content-between">
+                        Premium Plan <span class="badge bg-warning text-dark">Popular</span>
+                    </h5>
+                    <p class="mb-1">$49 / month</p>
+                    <ul class="mb-0 small">
+                        <li>Unlimited schools</li>
+                        <li>Advanced reporting</li>
+                        <li>Priority support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button id="continueStep2" class="btn btn-primary w-100">Continue →</button>
+        </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div id="step3" class="step">
+        <h4 class="step-title mb-3 text-center">Invite a colleague to collaborate</h4>
+        <p class="text-center text-muted mb-4">Would you like to add your first teacher now? You can always do this later from the dashboard.</p>
+
+        <form id="formStep3">
+            <div class="mb-3">
+                <label class="form-label">Teacher's Full Name</label>
+                <input type="text" id="teacherName" class="form-control" placeholder="e.g. Jane Doe">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Teacher's Email Address</label>
+                <input type="email" id="teacherEmail" class="form-control" placeholder="e.g. jane.doe@school.com">
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary w-100">Send Invite & Finish →</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        const steps = ["step1", "step2", "step3"];
+        let currentStep = 0;
+        const progressBar = document.getElementById("progressBar");
+        const stepIndicator = document.getElementById("stepIndicator");
+
+        function showStep(i) {
+            steps.forEach((s, idx) => document.getElementById(s).classList.toggle("active", i === idx));
+            progressBar.style.width = `${((i + 1) / steps.length) * 100}%`;
+            stepIndicator.textContent = `Step ${i + 1} of ${steps.length}`;
+        }
+
+        // Step 1
+        document.getElementById("formStep1").addEventListener("submit", e => {
+            e.preventDefault();
+            localStorage.setItem("schoolName", document.getElementById("schoolName").value);
+            localStorage.setItem("schoolType", document.getElementById("schoolType").value);
+            localStorage.setItem("schoolCity", document.getElementById("schoolCity").value);
+            currentStep = 1;
+            showStep(currentStep);
+        });
+
+        // Plan selection
+        const freePlan = document.getElementById("freePlan");
+        const premiumPlan = document.getElementById("premiumPlan");
+
+        freePlan.addEventListener("click", () => {
+            freePlan.classList.add("active");
+            premiumPlan.classList.remove("active");
+            localStorage.setItem("plan", "Free");
+        });
+        premiumPlan.addEventListener("click", () => {
+            premiumPlan.classList.add("active");
+            freePlan.classList.remove("active");
+            localStorage.setItem("plan", "Premium");
+        });
+
+        document.getElementById("continueStep2").addEventListener("click", () => {
+            currentStep = 2;
+            showStep(currentStep);
+        });
+
+        // Step 3
+        document.getElementById("formStep3").addEventListener("submit", e => {
+            e.preventDefault();
+            localStorage.setItem("teacherName", document.getElementById("teacherName").value);
+            localStorage.setItem("teacherEmail", document.getElementById("teacherEmail").value);
+            alert("🎉 Setup Complete! Data stored in localStorage.");
+            window.location.href = "/Dashboard";
+        });
+
+        showStep(currentStep);
+    </script>
+
+}

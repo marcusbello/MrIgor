@@ -18,37 +18,7 @@ html {
 }
 
 body {
-    font-family: 'Manrope', sans-serif;
-    background-color: #f6f6f8;
-    color: #0d121b;
-    margin-bottom: 60px;
-}
-.bg-primary-custom {
-    background-color: #135bec;
-}
-.text-primary-custom {
-    color: #135bec;
-}
-.btn-white-custom {
-    background-color: white;
-    color: #18191aff;
-    font-weight: 600;
-    border: 1px solid #35363686;
-}
-.btn-white-custom:hover {
-    background-color: #f0f0f0;
-    color: #135bec;
-    border-color: #135bec;
-}
-.nav.navbar {
-    border-bottom: 1px solid #e0e0e0;
-}
-@@media (max-width: 991.98px) {
-.navbar-nav {
-    margin-left: auto !important;
-    margin-right: auto !important;
-    text-align: center;
-    }
+  margin-bottom: 60px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
