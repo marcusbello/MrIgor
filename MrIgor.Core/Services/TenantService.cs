@@ -84,13 +84,16 @@ namespace MrIgor.Core.Services
             var apiKey = Environment.GetEnvironmentVariable("STRIPE_API_KEY");
             if (string.IsNullOrEmpty(apiKey))
                 throw new InvalidOperationException("Stripe API key not configured. Set STRIPE_API_KEY environment variable.");
+            var product = Environment.GetEnvironmentVariable("STRIPE_PRODCUT_NAME");
+            if (string.IsNullOrEmpty(apiKey))
+                throw new InvalidOperationException("Stripe Product Name not configured. Set STRIPE_PRODCUT_NAME environment variable.");
 
 
             StripeConfiguration.ApiKey = apiKey;
 
             // Attempt to locate a price that matches the requested plan and duration.
             var priceService = new PriceService();
-            var listOptions = new PriceListOptions { Limit = 100 };
+            var listOptions = new PriceListOptions { Product = product, Limit = 10 };
             var prices = priceService.List(listOptions).ToList();
 
             // Prefer a price that has matching metadata or nickname.
