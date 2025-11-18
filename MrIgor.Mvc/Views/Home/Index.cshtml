@@ -24,7 +24,7 @@ else
             The all-in-one platform to streamline administrative tasks, enhance communication, and foster student success.
         </p>
         <div class="d-flex justify-content-center gap-3 my-md-5 my-4">
-            <a href="#" class="btn btn-primary btn-lg">Get Started for Free</a>
+            <a class="btn btn-primary btn-lg" asp-controller="Onboarding" asp-action="Index">Get Started for Free</a>
             <a href="#" class="btn btn-white-custom btn-lg">Watch Video</a>
         </div>
     </div>
@@ -128,14 +128,17 @@ else
             <span class="text-muted">/month</span>
           </div>
           <ul class="list-unstyled text-muted small text-start flex-grow-1">
-          <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Manage 1 School</li>
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Student Information System</li>
-            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Basic Reporting</li>
-            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Limited to 4 Teachers</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Limited Reporting</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Attendance tracking</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Basic Class Management</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Limited to 2 Teachers</li>
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Up to 10 Subjects</li>
-            <li class="d-flex align-items-center"><i class="bi bi-check-circle-fill text-primary me-2"></i>Up to 100 Students</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Up to 50 Students</li>
+            <li class="d-flex align-items-center"><i class="bi bi-check-circle-fill text-primary me-2"></i>Community Support</li>
           </ul>
-          <form >
+          <form asp-controller="Onboarding" asp-action="Index" method="get">
+            <input type="hidden" name="plan" value="free" />
             <button class="btn btn-outline-primary w-100 mt-4 fw-semibold">Start Free</button>
           </form>
         </div>
@@ -148,18 +151,27 @@ else
           <h3 class="fs-4 fw-semibold text-primary mt-4">Pro</h3>
           <p class="text-muted small">For growing schools that need more.</p>
           <div class="my-3">
-            <span class="display-5 fw-bold text-dark">$39</span>
-            <span class="text-muted">/month</span>
+            <div class="d-flex justify-content-center align-items-end gap-2">
+              <span class="display-5 fw-bold text-dark">$39</span>
+              <span class="text-muted">/month</span>
+            </div>
+            <div class="mt-2 text-center">
+              <span class="badge bg-success">Save 26%</span>
+              <small class="text-muted ms-2">or <strong>$29</strong>/month billed yearly</small>
+            </div>
           </div>
           <ul class="list-unstyled text-muted small text-start flex-grow-1">
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Everything in Free, plus:</li>
-          <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Manage up to 3 Schools</li>
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Communication Portal</li>
-            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Unlimited Teachers</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Timetable + Class scheduling</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Exams, grades & transcripts</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Unlimited students & Teachers</li>
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Up to 100 Subjects</li>
-            <li class="d-flex align-items-center"><i class="bi bi-check-circle-fill text-primary me-2"></i>Up to 1500 Students</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Advanced Analytics</li>
+            <li class="d-flex align-items-center"><i class="bi bi-check-circle-fill text-primary me-2"></i>Priority Support</li>
           </ul>
-          <form >
+          <form asp-controller="Onboarding" asp-action="Index" method="get">
+            <input type="hidden" name="plan" value="pro" />
             <button class="btn btn-primary w-100 mt-4 fw-semibold">Choose Plan</button>
           </form>
         </div>
@@ -175,10 +187,13 @@ else
           </div>
           <ul class="list-unstyled text-muted small text-start flex-grow-1">
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Everything in Pro, plus:</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Multi-branch school management</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>API access</li>
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Dedicated Support</li>
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Custom Integrations</li>
             <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Unlimited Subjects</li>
-            <li class="d-flex align-items-center"><i class="bi bi-check-circle-fill text-primary me-2"></i>Unlimited Students</li>
+            <li class="d-flex align-items-center mb-2"><i class="bi bi-check-circle-fill text-primary me-2"></i>Dedicated Account Manager</li>
+            <li class="d-flex align-items-center"><i class="bi bi-check-circle-fill text-primary me-2"></i>24/7 Support</li>
           </ul>
           <button class="btn btn-outline-primary w-100 mt-4 fw-semibold">Contact Us</button>
         </div>

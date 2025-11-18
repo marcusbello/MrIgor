@@ -13,6 +13,11 @@
 *.userosscache
 *.sln.docstates
 
+# BuildHost files
+*.buildhost
+*.buildhost.exe.config
+BuildHost-*/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

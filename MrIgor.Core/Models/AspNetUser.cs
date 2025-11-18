@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MrIgor.Core.Models;
 
 [Index("NormalizedEmail", Name = "EmailIndex")]
-public partial class AspNetUser : IdentityUser  
+public partial class AspNetUser : IdentityUser
 {
     public Guid? TenantId { get; set; }
 

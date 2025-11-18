@@ -73,7 +73,7 @@
                     <input type="text" id="schoolType" class="form-control" placeholder="e.g. High School" required>
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Country / City</label>
+                    <label class="form-label">City / Country</label>
                     <input type="text" id="schoolCity" class="form-control" placeholder="e.g. London, UK" required>
                 </div>
             </div>
@@ -94,9 +94,13 @@
                     <h5 class="fw-bold">Free Plan</h5>
                     <p class="mb-1">$0 / month</p>
                     <ul class="mb-0 small">
-                        <li>Manage 1 school</li>
-                        <li>Up to 50 students</li>
-                        <li>Basic reporting</li>
+                        <li>Student Information System</li>
+                        <li>Limited Reporting</li>
+                        <li>Attendance tracking</li>
+                        <li>Basic Class Management</li>
+                        <li>Limited to 2 Teachers</li>
+                        <li>Up to 10 Subjects</li>
+                        <li>Limited to 50 Students</li>
                     </ul>
                 </div>
             </div>
@@ -105,12 +109,26 @@
                     <h5 class="fw-bold d-flex justify-content-between">
                         Premium Plan <span class="badge bg-warning text-dark">Popular</span>
                     </h5>
-                    <p class="mb-1">$49 / month</p>
+                    <p class="mb-1">$39 / month</p>
                     <ul class="mb-0 small">
-                        <li>Unlimited schools</li>
-                        <li>Advanced reporting</li>
+                        <li>Everything in Free, plus:</li>
+                        <li>Communication Portal</li>
+                        <li>Timetable + Class scheduling</li>
+                        <li>Exams, grades & transcripts</li>
+                        <li>Unlimited students & Teachers</li>
+                        <li>Advanced Analytics</li>
                         <li>Priority support</li>
                     </ul>
+                </div>
+
+                <!-- Hidden billing options -->
+                <div id="billingOptions" class="mt-3" style="display:none;">
+                    <label class="form-label fw-semibold">Choose Billing</label>
+                    <select id="billingSelect" class="form-select">
+                        <option value="" disabled>Select billing option</option>
+                        <option value="monthly" selected>$39 / month (Monthly)</option>
+                        <option value="yearly">$29 / month (Billed yearly)</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -138,6 +156,18 @@
                 <button type="submit" class="btn btn-primary w-100">Send Invite & Finish →</button>
             </div>
         </form>
+
+        <!-- Hidden form used to POST onboarding data to the server -->
+        <form id="onboardingSubmitForm" asp-controller="Onboarding" asp-action="Submit" method="post" style="display:none;">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="SelectedPlan" />
+            <input type="hidden" name="BillingOption" />
+            <input type="hidden" name="SchoolName" />
+            <input type="hidden" name="SchoolType" />
+            <input type="hidden" name="Address" />
+            <input type="hidden" name="TeacherName" />
+            <input type="hidden" name="TeacherEmail" />
+        </form>
     </div>
 </div>
 
@@ -148,6 +178,9 @@
         let currentStep = 0;
         const progressBar = document.getElementById("progressBar");
         const stepIndicator = document.getElementById("stepIndicator");
+        const planFromQuery = new URLSearchParams(window.location.search).get("plan");
+        const billingOptions = document.getElementById("billingOptions");
+        const billingSelect = document.getElementById("billingSelect");
 
         function showStep(i) {
             steps.forEach((s, idx) => document.getElementById(s).classList.toggle("active", i === idx));
@@ -172,12 +205,22 @@
         freePlan.addEventListener("click", () => {
             freePlan.classList.add("active");
             premiumPlan.classList.remove("active");
+            billingOptions.style.display = "none"; // hide billing menu
+            billingSelect.value = ""; // reset
             localStorage.setItem("plan", "Free");
+            localStorage.removeItem("billingOption");
         });
+
         premiumPlan.addEventListener("click", () => {
             premiumPlan.classList.add("active");
             freePlan.classList.remove("active");
+            billingOptions.style.display = "block";
             localStorage.setItem("plan", "Premium");
+        });
+
+        // SAVE BILLING OPTION
+        billingSelect.addEventListener("change", () => {
+            localStorage.setItem("billingOption", billingSelect.value);
         });
 
         document.getElementById("continueStep2").addEventListener("click", () => {
@@ -185,13 +228,36 @@
             showStep(currentStep);
         });
 
-        // Step 3
+        // Step 3 — submit onboarding to server
         document.getElementById("formStep3").addEventListener("submit", e => {
             e.preventDefault();
-            localStorage.setItem("teacherName", document.getElementById("teacherName").value);
-            localStorage.setItem("teacherEmail", document.getElementById("teacherEmail").value);
-            alert("🎉 Setup Complete! Data stored in localStorage.");
-            window.location.href = "/Dashboard";
+
+            // Save teacher locally
+            const teacherName = document.getElementById("teacherName").value || "";
+            const teacherEmail = document.getElementById("teacherEmail").value || "";
+            localStorage.setItem("teacherName", teacherName);
+            localStorage.setItem("teacherEmail", teacherEmail);
+
+            // Gather school info (from step1 inputs)
+            const schoolName = document.getElementById("schoolName") ? document.getElementById("schoolName").value : "";
+            const schoolType = document.getElementById("schoolType") ? document.getElementById("schoolType").value : "";
+            const address = document.getElementById("schoolCity") ? document.getElementById("schoolCity").value : "";
+
+            // Determine selected plan and billing
+            const selectedPlan = localStorage.getItem("plan") || (planFromQuery || "Free");
+            const billing = (billingSelect && billingSelect.value) ? billingSelect.value : "monthly";
+
+            // Populate hidden form and submit to controller
+            const postForm = document.getElementById("onboardingSubmitForm");
+            postForm.elements["SelectedPlan"].value = selectedPlan;
+            postForm.elements["BillingOption"].value = billing;
+            postForm.elements["SchoolName"].value = schoolName;
+            postForm.elements["SchoolType"].value = schoolType;
+            postForm.elements["Address"].value = address;
+            postForm.elements["TeacherName"].value = teacherName;
+            postForm.elements["TeacherEmail"].value = teacherEmail;
+
+            postForm.submit();
         });
 
         showStep(currentStep);

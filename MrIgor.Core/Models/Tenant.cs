@@ -24,6 +24,21 @@ public partial class Tenant
 
     public bool IsPaid { get; set; }
 
+    [StringLength(50)]
+    public string? SubscriptionType { get; set; }
+
+    [StringLength(100)]
+    public string? City { get; set; }
+
+    [StringLength(100)]
+    public string? Country { get; set; }
+
+    [StringLength(100)]
+    public string? SchoolType { get; set; }
+
+    [Column("PaymentURL")]
+    public string? PaymentUrl { get; set; }
+
     public string? SubcriptionPlan { get; set; }
 
     [InverseProperty("Tenant")]

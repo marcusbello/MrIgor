@@ -5,6 +5,9 @@
 		}
 	],
 	"settings": {
-		"dotnet.defaultSolution": "MrIgor.EntityModels.sln"
+		"dotnet.defaultSolution": "MrIgor.EntityModels.sln",
+		"dataworkspace.excludedProjects": [
+			"DatabaseProjectMrIgorDB/DatabaseProjectMrIgorDB.sqlproj"
+		]
 	}
 }
