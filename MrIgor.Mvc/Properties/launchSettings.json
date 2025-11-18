@@ -7,7 +7,12 @@
       "launchBrowser": true,
       "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
+<<<<<<< HEAD
         "ASPNETCORE_ENVIRONMENT": "Development"
+=======
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "STRIPE_PRODUCT_NAME": "prod_Pqpb0gAxIrV8A8",
+>>>>>>> 6f5f53a (stripe payment link done)
       }
     },
     "https": {
@@ -16,7 +21,12 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
+<<<<<<< HEAD
         "ASPNETCORE_ENVIRONMENT": "Development"
+=======
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "STRIPE_PRODUCT_NAME": "prod_Pqpb0gAxIrV8A8",
+>>>>>>> 6f5f53a (stripe payment link done)
       }
     }
   }
