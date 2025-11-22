@@ -10,19 +10,21 @@ namespace MrIgor.Core.Models;
 [Index("NormalizedEmail", Name = "EmailIndex")]
 public partial class AspNetUser : IdentityUser
 {
+    public string FullName { get; set; } = null!;
+
     public Guid? TenantId { get; set; }
 
-    [InverseProperty("User")]
-    public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; } = new List<AspNetUserClaim>();
+    // [InverseProperty("User")]
+    // public virtual ICollection<AspNetUserClaim> AspNetUserClaims { get; set; } = new List<AspNetUserClaim>();
 
-    [InverseProperty("User")]
-    public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; } = new List<AspNetUserLogin>();
+    // [InverseProperty("User")]
+    // public virtual ICollection<AspNetUserLogin> AspNetUserLogins { get; set; } = new List<AspNetUserLogin>();
 
-    [InverseProperty("User")]
-    public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; } = new List<AspNetUserRole>();
+    // [InverseProperty("User")]
+    // public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; } = new List<AspNetUserRole>();
 
-    [InverseProperty("User")]
-    public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
+    // [InverseProperty("User")]
+    // public virtual ICollection<AspNetUserToken> AspNetUserTokens { get; set; } = new List<AspNetUserToken>();
 
     [InverseProperty("Student")]
     public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();

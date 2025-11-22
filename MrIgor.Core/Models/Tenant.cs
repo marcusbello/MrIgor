@@ -41,13 +41,13 @@ public partial class Tenant
 
     public string? SubcriptionPlan { get; set; }
 
-    [InverseProperty("Tenant")]
+    // [InverseProperty("Tenant")]
     public virtual ICollection<AspNetRole> AspNetRoles { get; set; } = new List<AspNetRole>();
 
-    [InverseProperty("Tenant")]
+    // [InverseProperty("Tenant")]
     public virtual ICollection<AspNetUserRole> AspNetUserRoles { get; set; } = new List<AspNetUserRole>();
 
-    [InverseProperty("Tenant")]
+    // [InverseProperty("Tenant")]
     public virtual ICollection<AspNetUser> AspNetUsers { get; set; } = new List<AspNetUser>();
 
     [InverseProperty("Tenant")]

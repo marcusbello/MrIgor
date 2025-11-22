@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using MrIgor.Core.Models;
+using MrIgor.Infrastructure.Data;
 
 namespace MrIgor.Core.Services
 {
@@ -20,9 +21,9 @@ namespace MrIgor.Core.Services
 
     public class TenantService : ITenantService
     {
-        private readonly MrIgorDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public TenantService(MrIgorDbContext context)
+        public TenantService(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -39,11 +40,26 @@ namespace MrIgor.Core.Services
 
             _context.Tenants.Add(tenant);
             await _context.SaveChangesAsync();
-
             // update admin email
-            var adminUser = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Email == adminEmail);
+            var adminUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == adminEmail);
             if (adminUser != null)
             {
+                // add user to admin role
+                var adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
+                if (adminRole != null)
+                {
+                    _context.UserRoles.Add(new AspNetUserRole
+                    {
+                        UserId = adminUser.Id,
+                        RoleId = adminRole.Id
+                    });
+                }
+                // assign tenant id to user
+                // check if user already has tenant id first
+                if (adminUser.TenantId != null)
+                {
+                    throw new InvalidOperationException("Admin user is already assigned to a tenant.");
+                }
                 adminUser.TenantId = tenant.TenantId;
                 _context.AspNetUsers.Update(adminUser);
                 await _context.SaveChangesAsync();

@@ -10,6 +10,7 @@ using MrIgor.Mvc.Models;
 using MrIgor.Core.Models;
 using MrIgor.Core.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace MrIgor.Mvc.Controllers
 {
@@ -20,17 +21,26 @@ namespace MrIgor.Mvc.Controllers
     {
         private readonly ILogger<OnboardingController> _logger;
         private readonly UserManager<AspNetUser> _userManager;
+        private readonly SignInManager<AspNetUser> _signInManager;
         private readonly ITenantService _tenantService;
 
-        public OnboardingController(ILogger<OnboardingController> logger, UserManager<AspNetUser> userManager, ITenantService tenantService)
+        public OnboardingController(ILogger<OnboardingController> logger, UserManager<AspNetUser> userManager, SignInManager<AspNetUser> signInManager, ITenantService tenantService)
         {
             _logger = logger;
             _userManager = userManager;
+            _signInManager = signInManager;
             _tenantService = tenantService;
         }
 
         public IActionResult Index()
         {
+            // chekc if user is already onboarded
+            var user = _userManager.GetUserAsync(User).Result;
+            if (user != null && user.TenantId != null)
+            {
+                // redirect to dashboard
+                return RedirectToAction("Dashboard", "Index");
+            }
             return View();
         }
 
@@ -45,16 +55,7 @@ namespace MrIgor.Mvc.Controllers
         [HttpPost]
         public async Task<IActionResult> Submit(OnBoardingIndexViewModel model)
         {
-            Console.WriteLine("SUBMIT HIT");
             _logger.LogCritical("ONBOARDING SUBMIT HIT");
-            foreach (var item in ModelState)
-            {
-                foreach (var error in item.Value.Errors)
-                {
-                    Console.WriteLine($"MODEL ERROR: {item.Key} = {error.ErrorMessage}");
-                    _logger.LogError($"MODEL ERROR: {item.Key} = {error.ErrorMessage}");
-                }
-            }
 
             if (!ModelState.IsValid)
             {
@@ -70,7 +71,33 @@ namespace MrIgor.Mvc.Controllers
                 : model.SchoolName.Trim().ToLowerInvariant().Replace(" ", "-");
 
             // Create tenant (initially not paid)
-            var tenant = await _tenantService.CreateTenantAsync(model.SchoolName, domain ?? string.Empty, false, model.SelectedPlan ?? "Free", user?.Email ?? string.Empty);
+            var tenant = await _tenantService.CreateTenantAsync(
+                model.SchoolName,
+                domain ?? string.Empty,
+                false,
+                model.SelectedPlan ?? "Free",
+                user?.Email ?? string.Empty
+            );
+            // Attach tenant to user
+            if (user != null)
+            {
+                user.TenantId = tenant.TenantId;
+                // add claim if needed
+                var hasTenantClaim = (await _userManager.GetClaimsAsync(user))
+                    .Any(c => c.Type == "tenantId");
+
+                if (!hasTenantClaim)
+                {
+                    await _userManager.AddClaimAsync(user, new Claim("tenantId", tenant.TenantId.ToString()));
+                }
+                await _userManager.UpdateAsync(user);
+            }
+
+            
+
+            // IMPORTANT: Refresh cookie so TenantId is included
+            if (user != null)
+                await _signInManager.RefreshSignInAsync(user);
 
             // Create payment link for Pro/Premium tenants only
             var selectedPlan = (model.SelectedPlan ?? "Free").Trim();
@@ -97,7 +124,7 @@ namespace MrIgor.Mvc.Controllers
             }
 
             // If we couldn't create a payment link, continue to a generic success page
-            return RedirectToAction("Success");
+            return RedirectToAction("Index", "Dashboard");
         }
     }
 }

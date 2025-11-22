@@ -16,8 +16,8 @@
     </ul>
     <div class="d-flex flex-column flex-lg-row gap-2 align-items-center ms-lg-auto mt-3 mt-lg-0">
         <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage" class="nav-link btn btn-outline-secondary">Hello, @User.Identity?.Name!</a>
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="btn btn-primary btn">Logout</button>
+        <form method="post" asp-controller="Account" asp-action="Logout">
+            <button type="submit" class="btn btn-primary">Logout</button>
         </form>
     </div>
 }

@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MrIgor.Mvc.Controllers
 {
+    [Authorize(Policy = "RequireTenant")]
     public class DashboardController : Controller
     {
         // GET: DashboardController
-        [Authorize(Roles = "SuperAdmin, Admin, Teacher, Student")]
+        // [Authorize(Roles = "SuperAdmin, Admin, Teacher, Student")]
         public ActionResult Index()
         {
             if (User.IsInRole("SuperAdmin"))

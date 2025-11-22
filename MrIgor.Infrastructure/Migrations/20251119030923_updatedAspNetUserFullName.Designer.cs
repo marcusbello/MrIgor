@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using MrIgor.Mvc.Data;
+using MrIgor.Infrastructure.Data;
 
 #nullable disable
 
-namespace MrIgor.Mvc.Data.Migrations
+namespace MrIgor.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251119030923_updatedAspNetUserFullName")]
+    partial class updatedAspNetUserFullName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace MrIgor.Mvc.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("MrIgor.Core.Models.AspNetRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -30,11 +33,6 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -44,6 +42,9 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
@@ -51,121 +52,14 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
+                    b.HasIndex("TenantId");
+
+                    b.HasIndex(new[] { "NormalizedName" }, "RoleNameIndex")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex1")
+                        .HasFilter("([NormalizedName] IS NOT NULL)");
+
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasDiscriminator().HasValue("IdentityRole");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LoginProvider", "ProviderKey");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserId", "RoleId");
-
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId", "LoginProvider", "Name");
-
-                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetRoleClaim", b =>
@@ -190,7 +84,7 @@ namespace MrIgor.Mvc.Data.Migrations
 
                     b.HasIndex(new[] { "RoleId" }, "IX_AspNetRoleClaims_RoleId");
 
-                    b.ToTable("AspNetRoleClaim");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUser", b =>
@@ -211,6 +105,10 @@ namespace MrIgor.Mvc.Data.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -262,6 +160,11 @@ namespace MrIgor.Mvc.Data.Migrations
 
                     b.HasIndex(new[] { "NormalizedEmail" }, "EmailIndex");
 
+                    b.HasIndex(new[] { "NormalizedUserName" }, "UserNameIndex")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex1")
+                        .HasFilter("([NormalizedUserName] IS NOT NULL)");
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -287,18 +190,16 @@ namespace MrIgor.Mvc.Data.Migrations
 
                     b.HasIndex(new[] { "UserId" }, "IX_AspNetUserClaims_UserId");
 
-                    b.ToTable("AspNetUserClaim");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUserLogin", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -311,7 +212,7 @@ namespace MrIgor.Mvc.Data.Migrations
 
                     b.HasIndex(new[] { "UserId" }, "IX_AspNetUserLogins_UserId");
 
-                    b.ToTable("AspNetUserLogin");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUserRole", b =>
@@ -331,7 +232,7 @@ namespace MrIgor.Mvc.Data.Migrations
 
                     b.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
 
-                    b.ToTable("AspNetUserRole");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUserToken", b =>
@@ -340,19 +241,17 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserToken");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.Assessment", b =>
@@ -380,7 +279,8 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.HasKey("AssessmentId");
+                    b.HasKey("AssessmentId")
+                        .HasName("PK__Assessme__3D2BF81EDD65C589");
 
                     b.HasIndex("SubjectId");
 
@@ -398,7 +298,9 @@ namespace MrIgor.Mvc.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceId"));
 
                     b.Property<DateTime?>("AttendedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<int>("ClassroomId")
                         .HasColumnType("int");
@@ -414,7 +316,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("AttendanceId");
+                    b.HasKey("AttendanceId")
+                        .HasName("PK__Attendan__8B69261C363C9B7A");
 
                     b.HasIndex("ClassroomId");
 
@@ -436,10 +339,14 @@ namespace MrIgor.Mvc.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClassroomId"));
 
                     b.Property<int>("Capacity")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(30);
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<string>("Location")
                         .HasMaxLength(255)
@@ -453,7 +360,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ClassroomId");
+                    b.HasKey("ClassroomId")
+                        .HasName("PK__Classroo__11618EAAEA32DC3B");
 
                     b.HasIndex("TenantId");
 
@@ -485,7 +393,8 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.HasKey("ExamId");
+                    b.HasKey("ExamId")
+                        .HasName("PK__Exams__297521C7A36B965C");
 
                     b.HasIndex("SubjectId");
 
@@ -516,7 +425,9 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("SentAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<int?>("SubjectId")
                         .HasColumnType("int");
@@ -524,7 +435,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("NotificationId");
+                    b.HasKey("NotificationId")
+                        .HasName("PK__Notifica__20CF2E12FE7BBADC");
 
                     b.HasIndex("RecipientId");
 
@@ -561,7 +473,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ScheduleId");
+                    b.HasKey("ScheduleId")
+                        .HasName("PK__Schedule__9C8A5B49821B2F9C");
 
                     b.HasIndex("ClassroomId");
 
@@ -587,7 +500,9 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("RecordedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<decimal>("Score1")
                         .HasColumnType("decimal(5, 2)")
@@ -604,7 +519,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ScoreId");
+                    b.HasKey("ScoreId")
+                        .HasName("PK__Scores__7DD229D18032CA2C");
 
                     b.HasIndex("AssessmentId");
 
@@ -628,13 +544,17 @@ namespace MrIgor.Mvc.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SessionId"));
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<DateOnly>("EndDate")
                         .HasColumnType("date");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -647,7 +567,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("SessionId");
+                    b.HasKey("SessionId")
+                        .HasName("PK__Sessions__C9F492902F42498B");
 
                     b.HasIndex("TenantId");
 
@@ -663,7 +584,9 @@ namespace MrIgor.Mvc.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("RegisteredAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<string>("StudentId")
                         .IsRequired()
@@ -675,7 +598,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__StudentS__3214EC072CD4AF8B");
 
                     b.HasIndex("SubjectId");
 
@@ -712,7 +636,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__StudentS__3214EC071B055513");
 
                     b.HasIndex("StudentSubjectId");
 
@@ -749,7 +674,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("SubjectId");
+                    b.HasKey("SubjectId")
+                        .HasName("PK__Subjects__AC1BA3A80BC4A452");
 
                     b.HasIndex("ClassroomId");
 
@@ -769,7 +695,9 @@ namespace MrIgor.Mvc.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("AssignedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<int>("SubjectId")
                         .HasColumnType("int");
@@ -781,7 +709,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("PK__Teachers__3214EC07B62212B0");
 
                     b.HasIndex("SubjectId");
 
@@ -797,7 +726,8 @@ namespace MrIgor.Mvc.Data.Migrations
                 {
                     b.Property<Guid>("TenantId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newid())");
 
                     b.Property<string>("City")
                         .HasMaxLength(100)
@@ -808,14 +738,18 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
 
                     b.Property<string>("Domain")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
@@ -825,8 +759,9 @@ namespace MrIgor.Mvc.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("PaymentURL")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PaymentUrl")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PaymentURL");
 
                     b.Property<string>("SchoolType")
                         .HasMaxLength(100)
@@ -835,153 +770,92 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Property<string>("SubcriptionPlan")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SubcriptionType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("SubscriptionType")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("TenantId");
+                    b.HasKey("TenantId")
+                        .HasName("PK__Tenants__2E9B47E170819AFD");
 
                     b.ToTable("Tenants", "Academic");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetRole", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+                    b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
+                        .WithMany("AspNetRoles")
+                        .HasForeignKey("TenantId")
+                        .HasConstraintName("FK_AspNetRoles_Tenant");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("TenantId");
-
-                    b.HasDiscriminator().HasValue("AspNetRole");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetRoleClaim", b =>
                 {
-                    b.HasOne("MrIgor.Core.Models.AspNetRole", "Role")
-                        .WithMany("AspNetRoleClaims")
+                    b.HasOne("MrIgor.Core.Models.AspNetRole", null)
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUser", b =>
                 {
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("AspNetUsers")
-                        .HasForeignKey("TenantId");
+                        .HasForeignKey("TenantId")
+                        .HasConstraintName("FK_AspNetUsers_Tenant");
 
                     b.Navigation("Tenant");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUserClaim", b =>
                 {
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", "User")
-                        .WithMany("AspNetUserClaims")
+                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUserLogin", b =>
                 {
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", "User")
-                        .WithMany("AspNetUserLogins")
+                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUserRole", b =>
                 {
-                    b.HasOne("MrIgor.Core.Models.AspNetRole", "Role")
-                        .WithMany("AspNetUserRoles")
+                    b.HasOne("MrIgor.Core.Models.AspNetRole", null)
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("AspNetUserRoles")
-                        .HasForeignKey("TenantId");
+                        .HasForeignKey("TenantId")
+                        .HasConstraintName("FK_AspNetUserRoles_Tenant");
 
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", "User")
-                        .WithMany("AspNetUserRoles")
+                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Role");
-
                     b.Navigation("Tenant");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUserToken", b =>
                 {
-                    b.HasOne("MrIgor.Core.Models.AspNetUser", "User")
-                        .WithMany("AspNetUserTokens")
+                    b.HasOne("MrIgor.Core.Models.AspNetUser", null)
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MrIgor.Core.Models.Assessment", b =>
@@ -989,14 +863,14 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("Assessments")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Assessments_Subject");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Assessments")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Assessments_Tenant");
 
                     b.Navigation("Subject");
 
@@ -1008,26 +882,26 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.Classroom", "Classroom")
                         .WithMany("Attendances")
                         .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Attendance_Classroom");
 
                     b.HasOne("MrIgor.Core.Models.AspNetUser", "Student")
                         .WithMany("Attendances")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Attendance_Student");
 
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("Attendances")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Attendance_Subject");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Attendances")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Attendance_Tenant");
 
                     b.Navigation("Classroom");
 
@@ -1043,8 +917,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Classrooms")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Classrooms_Tenant");
 
                     b.Navigation("Tenant");
                 });
@@ -1054,14 +928,14 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("Exams")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Exams_Subject");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Exams")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Exams_Tenant");
 
                     b.Navigation("Subject");
 
@@ -1073,18 +947,19 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.AspNetUser", "Recipient")
                         .WithMany("Notifications")
                         .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Notifications_Recipient");
 
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("Notifications")
-                        .HasForeignKey("SubjectId");
+                        .HasForeignKey("SubjectId")
+                        .HasConstraintName("FK_Notifications_Subject");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Notifications")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Notifications_Tenant");
 
                     b.Navigation("Recipient");
 
@@ -1098,20 +973,20 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.Classroom", "Classroom")
                         .WithMany("Schedules")
                         .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Schedules_Classroom");
 
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("Schedules")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Schedules_Subject");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Schedules")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Schedules_Tenant");
 
                     b.Navigation("Classroom");
 
@@ -1124,29 +999,31 @@ namespace MrIgor.Mvc.Data.Migrations
                 {
                     b.HasOne("MrIgor.Core.Models.Assessment", "Assessment")
                         .WithMany("Scores")
-                        .HasForeignKey("AssessmentId");
+                        .HasForeignKey("AssessmentId")
+                        .HasConstraintName("FK_Scores_Assessment");
 
                     b.HasOne("MrIgor.Core.Models.Exam", "Exam")
                         .WithMany("Scores")
-                        .HasForeignKey("ExamId");
+                        .HasForeignKey("ExamId")
+                        .HasConstraintName("FK_Scores_Exam");
 
                     b.HasOne("MrIgor.Core.Models.AspNetUser", "Student")
                         .WithMany("Scores")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Scores_Student");
 
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("Scores")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Scores_Subject");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Scores")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Scores_Tenant");
 
                     b.Navigation("Assessment");
 
@@ -1164,8 +1041,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Sessions")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Sessions_Tenant");
 
                     b.Navigation("Tenant");
                 });
@@ -1175,20 +1052,20 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.AspNetUser", "Student")
                         .WithMany("StudentSubjects")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_StudentSubjects_Student");
 
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("StudentSubjects")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_StudentSubjects_Subject");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("StudentSubjects")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_StudentSubjects_Tenant");
 
                     b.Navigation("Student");
 
@@ -1202,20 +1079,20 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.StudentSubject", "StudentSubject")
                         .WithMany("StudentSubjectApprovals")
                         .HasForeignKey("StudentSubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Approvals_StudentSubject");
 
                     b.HasOne("MrIgor.Core.Models.AspNetUser", "Teacher")
                         .WithMany("StudentSubjectApprovals")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Approvals_Teacher");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("StudentSubjectApprovals")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Approvals_Tenant");
 
                     b.Navigation("StudentSubject");
 
@@ -1228,19 +1105,20 @@ namespace MrIgor.Mvc.Data.Migrations
                 {
                     b.HasOne("MrIgor.Core.Models.Classroom", "Classroom")
                         .WithMany("Subjects")
-                        .HasForeignKey("ClassroomId");
+                        .HasForeignKey("ClassroomId")
+                        .HasConstraintName("FK_Subjects_Classroom");
 
                     b.HasOne("MrIgor.Core.Models.Session", "Session")
                         .WithMany("Subjects")
                         .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Subjects_Session");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("Subjects")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Subjects_Tenant");
 
                     b.Navigation("Classroom");
 
@@ -1254,20 +1132,20 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.HasOne("MrIgor.Core.Models.Subject", "Subject")
                         .WithMany("TeachersSubjects")
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_TeachersSubjects_Subject");
 
                     b.HasOne("MrIgor.Core.Models.AspNetUser", "Teacher")
                         .WithMany("TeachersSubjects")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_TeachersSubjects_Teacher");
 
                     b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
                         .WithMany("TeachersSubjects")
                         .HasForeignKey("TenantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_TeachersSubjects_Tenant");
 
                     b.Navigation("Subject");
 
@@ -1276,25 +1154,8 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("MrIgor.Core.Models.AspNetRole", b =>
-                {
-                    b.HasOne("MrIgor.Core.Models.Tenant", "Tenant")
-                        .WithMany("AspNetRoles")
-                        .HasForeignKey("TenantId");
-
-                    b.Navigation("Tenant");
-                });
-
             modelBuilder.Entity("MrIgor.Core.Models.AspNetUser", b =>
                 {
-                    b.Navigation("AspNetUserClaims");
-
-                    b.Navigation("AspNetUserLogins");
-
-                    b.Navigation("AspNetUserRoles");
-
-                    b.Navigation("AspNetUserTokens");
-
                     b.Navigation("Attendances");
 
                     b.Navigation("Notifications");
@@ -1387,13 +1248,6 @@ namespace MrIgor.Mvc.Data.Migrations
                     b.Navigation("Subjects");
 
                     b.Navigation("TeachersSubjects");
-                });
-
-            modelBuilder.Entity("MrIgor.Core.Models.AspNetRole", b =>
-                {
-                    b.Navigation("AspNetRoleClaims");
-
-                    b.Navigation("AspNetUserRoles");
                 });
 #pragma warning restore 612, 618
         }
